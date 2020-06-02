@@ -113,14 +113,13 @@ def register_result(request):
         return redirect('/')
 
 
-class LoginView(generics.CreateAPIView):
-    serializer_class = BlogUserLoginSerializer
-    queryset = BlogUser.objects.all()
-
-    def create(self, request, *args, **kwargs):
-        # authentication
-        password = make_password(request.data['password'], hasher='md5')
-        user = self.queryset.filter(username=request.data['username'],
-                                    password=password)
-        if not user:
-            return redirect()
+# class LoginView(generics.CreateAPIView):
+#     serializer_class = BlogUserLoginSerializer
+#     queryset = BlogUser.objects.all()
+#
+#     def create(self, request, *args, **kwargs):
+        # password = make_password(request.data['password'], hasher='md5')
+        # user = self.queryset.filter(username=request.data['username'],
+        #                             password=password)
+        # if not user:
+        #     return redirect()
