@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+</head>
+<body>
+    <div id="primary" class="site-content">
+        <div id="content" role="main">
+            <header class="archive-header">
+                <h2 class="archive-title">{{ content }}</h2>
+            </header>
+            <br>
+            <p>{{ token }}</p>
+            <br>
+            <header class="archive-header" style="text-align: center">
+                <a href="{% url 'Account:login' %}">登录</a>
+                |
+                <a href="/home">回到首页</a>
+            </header>
+        </div>
+    </div>
+</body>
+</html>
