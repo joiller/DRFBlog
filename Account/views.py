@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from rest_framework.settings import api_settings
+
 from .serializers import *
 from rest_framework import views, generics, viewsets
 from rest_framework.response import Response
@@ -10,6 +12,8 @@ from django.http import HttpResponseForbidden
 import jwt
 from utils import get_md5
 from rest_framework.authtoken.models import Token
+from django.contrib.auth import logout, login
+from rest_framework.authtoken.views import ObtainAuthToken
 
 
 # Create your views here.
@@ -104,7 +108,7 @@ def register_result(request):
             content = '验证成功，可以登录了'
             title = '验证成功'
 
-        return render(request, 'Account/result.html',{
+        return render(request, 'Account/result.html', {
             'title': title,
             'content': content,
             'token': token
@@ -113,13 +117,23 @@ def register_result(request):
         return redirect('/')
 
 
-# class LoginView(generics.CreateAPIView):
-#     serializer_class = BlogUserLoginSerializer
-#     queryset = BlogUser.objects.all()
-#
-#     def create(self, request, *args, **kwargs):
-        # password = make_password(request.data['password'], hasher='md5')
-        # user = self.queryset.filter(username=request.data['username'],
-        #                             password=password)
-        # if not user:
-        #     return redirect()
+class LoginView(ObtainAuthToken):
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('Account:base')
+
+
+# def base_view(request):
+#     return render(request, 'Account/base.html')
+
+
+class BaseView(generics.ListAPIView):
+    # authentication_classes = [ObtainAuthToken]
+    queryset = BlogUser.objects.all()
+    serializer_class = BlogUserSerializer
+
+    def list(self, request, *args, **kwargs):
+        return render(request, 'Account/base.html')
