@@ -131,7 +131,13 @@ class LoginView(ObtainAuthToken):
 
 
 def logout_view(request):
+    user = request.user
+    token = Token.objects.get(user=user)
+    token.delete()
     logout(request)
+    print(user)
+    Token.objects.create(user=user)
+    # Token.objects.create(user=request.user)
     return redirect('Account:base')
 
 
