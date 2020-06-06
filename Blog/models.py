@@ -63,17 +63,23 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-    def get_parents(self):
+    def get_parents(self, json=False):
 
         def parse(temp):
             if temp.parent:
+                if not json:
+                    return {
+                        temp: {
+                            'parent': parse(temp.parent)
+                        }
+                    }
                 return {
-                    temp: {
+                    temp.slug: {
                         'parent': parse(temp.parent)
                     }
                 }
             else:
-                return temp
+                return temp if not json else temp.slug
 
         return parse(self)
 
@@ -85,18 +91,25 @@ class Category(models.Model):
 
         return categories
 
-    def get_children(self):
+    def get_children(self, json=False):
         all_categories = Category.objects.all()
 
         def parse(category):
-            children = all_categories.filter(parent=category.parent)
+            children = all_categories.filter(parent=category)
+            print(list(map(lambda x: x.name, children)))
             new = {'children': {}}
             for child in children:
-                new['children'][child] = parse(child)
+                print(child.slug)
+                if not json:
+                    new['children'][child] = parse(child)
+                else:
+                    new['children'][child.slug] = parse(child)
             return new
 
         return {
             self: parse(self)
+        } if not json else {
+            self.slug: parse(self)
         }
 
 
