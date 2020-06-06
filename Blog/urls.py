@@ -6,5 +6,6 @@ router = routers.DefaultRouter()
 router.register('', BlogPostView)
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
+    path('list', BlogListView.as_view())
 ]

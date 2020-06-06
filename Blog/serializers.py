@@ -6,3 +6,5 @@ class BlogPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = BlogPost
         exclude = []
+
+# class BlogListSerializer(serializers.ModelSerializer)
