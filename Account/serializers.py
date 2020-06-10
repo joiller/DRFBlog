@@ -56,7 +56,7 @@ class BlogUserRegisterSerializer(serializers.ModelSerializer):
         account.is_active = False
         account.source = 'Register'
         print(account.password,'before')
-        account.password = make_password(self.validated_data['password'],hasher='md5')
+        account.password = make_password(self.validated_data['password'], hasher='bcrypt_sha256')
         print(account.password,'later')
         account.save()
         print(account)
